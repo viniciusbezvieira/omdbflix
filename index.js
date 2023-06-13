@@ -1,7 +1,7 @@
 import React from 'react';
 import { AppRegistry } from 'react-native';
 import App from './src/App';
-import { default as Theme } from './src/shared/Theme';
+import Theme from './src/Theme';
 import { name as appName } from './app.json';
 import { PaperProvider } from 'react-native-paper';
 

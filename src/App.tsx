@@ -4,7 +4,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Platform, StatusBar, useColorScheme } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import RootNavigation from './navigation/RootNavigation';
-import { Theme } from './shared/';
+import Theme from './Theme';
 
 function App(): JSX.Element {
   const theme = Theme.ThemeConfig();

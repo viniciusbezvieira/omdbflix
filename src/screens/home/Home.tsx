@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, FlatList } from 'react-native';
 import { useDebounce, useToggle } from '@uidotdev/usehooks';
 import { getMovieListByTitle } from '../../services/movies';
-import { Loading } from '../../shared';
+import { Loading } from '../../components';
 import { TitleCard } from './components';
 import { Searchbar } from 'react-native-paper';
+import { Title } from '../../models/title';
 
 const Home = ({ navigation }) => {
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<Title[]>([]);
   const [search, setSearch] = useState('');
   const [loading, toggleLoading] = useToggle(false);
   const debouncedSearchTerm = useDebounce(search, 300);
