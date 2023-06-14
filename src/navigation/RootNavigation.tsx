@@ -4,7 +4,7 @@ import { Home, TitleDetails } from '../screens';
 
 const Stack = createNativeStackNavigator();
 
-const RootNavigation = () => {
+const RootNavigation: React.FC = () => {
   return (
     <Stack.Navigator
       initialRouteName="Home"
