@@ -1,19 +1,29 @@
 import React from 'react';
-import { TouchableHighlight, Image, Dimensions } from 'react-native';
+import { TouchableHighlight, Image } from 'react-native';
+import { TitleList } from '../../../services/movies/types';
+import { styles } from '../styles';
 
-const TitleCard = ({ data, onPress }) => (
-  <TouchableHighlight onPress={onPress}>
+type Props = {
+  index: number;
+  data: TitleList;
+  onPress: any;
+};
+
+const TitleCard: React.FC<Props> = ({ index, data, onPress }: Props) => (
+  <TouchableHighlight
+    onPress={onPress}
+    style={{
+      ...{ marginHorizontal: index % 2 !== 0 ? 0 : 8 },
+      ...styles.TitleCardTouchableHighlight,
+    }}>
     <Image
-      style={{
-        width: Dimensions.get('window').width / 2,
-        height: Dimensions.get('window').width / 2 + 75,
-      }}
       source={{
         uri:
           data.Poster === 'N/A'
             ? 'https://placehold.co/200x275/404040/9f9f9f.png?text=No+Poster'
             : data.Poster,
       }}
+      style={styles.TitleCardImage}
     />
   </TouchableHighlight>
 );

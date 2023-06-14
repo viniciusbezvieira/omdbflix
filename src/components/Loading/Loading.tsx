@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 
-const Loading = () => (
+const Loading: React.FC = () => (
   <ActivityIndicator style={styles.root} animating={true} />
 );
 

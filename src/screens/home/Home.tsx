@@ -1,69 +1,51 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, FlatList } from 'react-native';
-import { useDebounce, useToggle } from '@uidotdev/usehooks';
-import { getMovieListByTitle } from '../../services/movies';
-import { Loading } from '../../components';
-import { TitleCard } from './components';
+import React, { useState } from 'react';
+import { FlatList, SafeAreaView } from 'react-native';
+import { useDebounce, useCounter } from '@uidotdev/usehooks';
 import { Searchbar } from 'react-native-paper';
-import { Title } from '../../models/title';
+import { TitleCard } from './components';
+import { styles, GridDivisor } from './styles';
+import { useSearchMoviesByTitle } from './useHome';
 
-const Home = ({ navigation }) => {
-  const [data, setData] = useState<Title[]>([]);
-  const [search, setSearch] = useState('');
-  const [loading, toggleLoading] = useToggle(false);
-  const debouncedSearchTerm = useDebounce(search, 300);
+const Home: React.FC = ({ navigation }: any) => {
+  const [search, setSearch] = useState<string>('');
+  const [searchPage, { increment, set }] = useCounter<number>(1);
+  const debouncedSearch: string = useDebounce(search, 300);
+  const [searchMoviesByTitle, setSearchMoviesByTitle] = useSearchMoviesByTitle({
+    search: debouncedSearch,
+    page: searchPage,
+  });
 
-  const clearSearch = () => {
-    setData([]);
+  const clearData = () => {
+    setSearchMoviesByTitle([]);
+    set(1);
   };
 
-  useEffect(() => {
-    if (search.trim().length >= 3) {
-      toggleLoading();
-      getMovieListByTitle(search)
-        .then(res => {
-          toggleLoading();
-          setData(res.data.Search);
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    }
-  }, [debouncedSearchTerm]);
-
   return (
-    <>
+    <SafeAreaView>
       <Searchbar
         placeholder="Busque por filmes, séries e episodios"
         onChangeText={text => setSearch(text)}
-        onClearIconPress={clearSearch}
+        onClearIconPress={clearData}
         value={search}
         style={styles.search}
       />
-      {loading ? (
-        <Loading />
-      ) : (
-        <FlatList
-          data={data}
-          renderItem={({ item }) => (
-            <TitleCard
-              data={item}
-              onPress={() => navigation.navigate('TitleDetails', item)}
-            />
-          )}
-          numColumns={2}
-          keyExtractor={item => item.imdbID}
-        />
-      )}
-    </>
+      <FlatList
+        data={searchMoviesByTitle}
+        renderItem={({ item, index }) => (
+          <TitleCard
+            index={index}
+            data={item}
+            onPress={() => navigation.navigate('TitleDetails', item)}
+          />
+        )}
+        ItemSeparatorComponent={() => <GridDivisor />}
+        numColumns={2}
+        keyExtractor={(item, index) => `${item.imdbID}-${index}`}
+        onEndReached={increment}
+        onEndReachedThreshold={0.3}
+      />
+    </SafeAreaView>
   );
 };
 
 export default Home;
-
-const styles = StyleSheet.create({
-  search: {
-    backgroundColor: '#EAEAEA',
-    borderRadius: 0,
-  },
-});

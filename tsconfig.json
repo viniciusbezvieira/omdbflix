@@ -12,5 +12,6 @@
     "target": "esnext",
     "noImplicitAny": false,
     "typeRoots": ["./types"],
+    "allowSyntheticDefaultImports": true
   },
 }
